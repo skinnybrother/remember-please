@@ -1,14 +1,13 @@
-package com.smalldogg.rememberplease.domain.weather;
+package com.smalldogg.rememberplease.domain.forecast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.smalldogg.rememberplease.domain.weather.dto.LocationDto;
-import com.smalldogg.rememberplease.domain.weather.dto.WeatherResponseDto;
-import com.smalldogg.rememberplease.domain.weather.repository.WeatherRepository;
+import com.smalldogg.rememberplease.domain.forecast.dto.LocationDto;
+import com.smalldogg.rememberplease.domain.forecast.dto.WeatherResponseDto;
+import com.smalldogg.rememberplease.domain.forecast.repository.WeatherRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j

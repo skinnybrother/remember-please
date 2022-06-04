@@ -1,4 +1,4 @@
-package com.smalldogg.rememberplease.domain.weather.dto;
+package com.smalldogg.rememberplease.domain.forecast.dto;
 
 import lombok.Data;
 import lombok.NonNull;

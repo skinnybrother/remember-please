@@ -1,4 +1,4 @@
-package com.smalldogg.rememberplease.domain.weather;
+package com.smalldogg.rememberplease.domain.forecast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

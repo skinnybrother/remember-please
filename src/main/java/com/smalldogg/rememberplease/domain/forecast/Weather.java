@@ -1,4 +1,4 @@
-package com.smalldogg.rememberplease.domain.weather;
+package com.smalldogg.rememberplease.domain.forecast;
 
 import com.smalldogg.rememberplease.domain.BaseTimeEntity;
 import lombok.AccessLevel;

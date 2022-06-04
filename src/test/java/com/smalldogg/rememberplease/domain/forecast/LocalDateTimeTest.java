@@ -1,15 +1,10 @@
-package com.smalldogg.rememberplease.domain.weather;
+package com.smalldogg.rememberplease.domain.forecast;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 public class LocalDateTimeTest {
 

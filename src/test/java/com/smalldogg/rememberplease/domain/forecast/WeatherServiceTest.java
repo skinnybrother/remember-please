@@ -1,10 +1,9 @@
-package com.smalldogg.rememberplease.domain.weather;
+package com.smalldogg.rememberplease.domain.forecast;
 
-import com.smalldogg.rememberplease.domain.weather.dto.LocationDto;
-import com.smalldogg.rememberplease.domain.weather.dto.WeatherResponseDto;
-import com.smalldogg.rememberplease.domain.weather.repository.WeatherRepository;
+import com.smalldogg.rememberplease.domain.forecast.dto.LocationDto;
+import com.smalldogg.rememberplease.domain.forecast.dto.WeatherResponseDto;
+import com.smalldogg.rememberplease.domain.forecast.repository.WeatherRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

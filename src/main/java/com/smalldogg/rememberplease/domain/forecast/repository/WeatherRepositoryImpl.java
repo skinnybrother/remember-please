@@ -1,15 +1,9 @@
-package com.smalldogg.rememberplease.domain.weather.repository;
+package com.smalldogg.rememberplease.domain.forecast.repository;
 
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.smalldogg.rememberplease.domain.weather.QWeather;
-import com.smalldogg.rememberplease.domain.weather.dto.WeatherDto;
-import com.smalldogg.rememberplease.domain.weather.dto.WeatherResponseDto;
+import com.smalldogg.rememberplease.domain.forecast.dto.WeatherResponseDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
-
-import static com.smalldogg.rememberplease.domain.weather.QWeather.*;
 
 @RequiredArgsConstructor
 public class WeatherRepositoryImpl implements WeatherRepositoryCustom{

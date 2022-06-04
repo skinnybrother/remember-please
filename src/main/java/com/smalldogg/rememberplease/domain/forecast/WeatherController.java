@@ -1,7 +1,7 @@
-package com.smalldogg.rememberplease.domain.weather;
+package com.smalldogg.rememberplease.domain.forecast;
 
-import com.smalldogg.rememberplease.domain.weather.dto.LocationDto;
-import com.smalldogg.rememberplease.domain.weather.dto.WeatherResponseDto;
+import com.smalldogg.rememberplease.domain.forecast.dto.LocationDto;
+import com.smalldogg.rememberplease.domain.forecast.dto.WeatherResponseDto;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

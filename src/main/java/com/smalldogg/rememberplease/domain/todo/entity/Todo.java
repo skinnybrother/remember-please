@@ -1,6 +1,7 @@
 package com.smalldogg.rememberplease.domain.todo.entity;
 
 import com.smalldogg.rememberplease.domain.BaseTimeEntity;
+import com.smalldogg.rememberplease.domain.BooleanYesNoConvert;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -23,6 +24,7 @@ public class Todo extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id")
     private Folder folder;
+    @Convert(converter = BooleanYesNoConvert.class)
     private Boolean done;
 
     public Todo(String content, LocalDateTime dueDateTime, Folder folder) {
