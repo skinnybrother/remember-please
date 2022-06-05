@@ -18,7 +18,7 @@ public class LocalDateTimeUtil {
         LocalDate localDate = LocalDateTime.now().toLocalDate();
 
         if (LocalTime.now().isBefore(LocalTime.of(0,40))) {
-            localDate.minusDays(1L);
+            localDate = localDate.minusDays(1L);
         }
         return localDate.format(dateTimeFormatter);
     }
