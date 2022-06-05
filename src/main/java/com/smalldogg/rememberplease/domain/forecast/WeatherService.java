@@ -36,10 +36,10 @@ public class WeatherService {
         Optional<Forecast> forecastOptional = forecastRepository.findById(forecastId);
 
         LocalDateTime nearestAvailableLocalDateTime = getNearestAvailableLocalDateTime();
-        Optional<Forecast> latestAvailbleForecast = forecastRepository.findByXAndYAndReleaseDateAfter(locationDto.getX(), locationDto.getY(), nearestAvailableLocalDateTime);
+        Optional<Forecast> latestAvailableForecast = forecastRepository.findByXAndYAndReleaseDateAfter(locationDto.getX(), locationDto.getY(), nearestAvailableLocalDateTime);
 
         Forecast forecast;
-        if (latestAvailbleForecast.isEmpty()) {
+        if (latestAvailableForecast.isEmpty()) {
             ForecastDto forecastDto = forecastClient.getForecast(locationDto.getX(), locationDto.getY());
 
             forecastDto.setX(locationDto.getX());
