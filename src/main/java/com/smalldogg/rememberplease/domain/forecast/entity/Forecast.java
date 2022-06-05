@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,6 +26,7 @@ public class Forecast extends BaseTimeEntity implements Persistable<String> {
     private String city;
     private String state;
     private String town;
+    private LocalDateTime releaseDate;
     private float pty;//강수형태
     private float reh;//습도
     private float rn1;//1시간 강수량

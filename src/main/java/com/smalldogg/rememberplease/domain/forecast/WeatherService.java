@@ -11,7 +11,10 @@ import com.smalldogg.rememberplease.domain.forecast.repository.ForecastRepositor
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
+
+import static com.smalldogg.rememberplease.domain.forecast.LocalDateTimeUtil.getNearestAvailableLocalDateTime;
 
 @Slf4j
 @Service
@@ -32,10 +35,11 @@ public class WeatherService {
         ForecastId forecastId = new ForecastId(locationDto.getX(), locationDto.getY());
         Optional<Forecast> forecastOptional = forecastRepository.findById(forecastId);
 
-        // @Todo 갱신이 필요한지 여부 판단 로직 필요
+        LocalDateTime nearestAvailableLocalDateTime = getNearestAvailableLocalDateTime();
+        Optional<Forecast> latestAvailbleForecast = forecastRepository.findByXAndYAndReleaseDateAfter(locationDto.getX(), locationDto.getY(), nearestAvailableLocalDateTime);
 
         Forecast forecast;
-        if (forecastOptional.isEmpty()) {
+        if (latestAvailbleForecast.isEmpty()) {
             ForecastDto forecastDto = forecastClient.getForecast(locationDto.getX(), locationDto.getY());
 
             forecastDto.setX(locationDto.getX());
@@ -43,11 +47,11 @@ public class WeatherService {
             forecastDto.setState(location.getState());
             forecastDto.setCity(location.getCity());
             forecastDto.setTown(location.getTown());
-
+            forecastDto.setReleaseDate(nearestAvailableLocalDateTime);
             forecast = ForecastRequestMapper.INSTANCE.toEntity(forecastDto);
 
             forecastRepository.save(forecast);
-        }else{
+        } else {
             forecast = forecastOptional.get();
         }
 

@@ -22,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.smalldogg.rememberplease.domain.forecast.LocalDateTimeUtil.getLocalDate;
+import static com.smalldogg.rememberplease.domain.forecast.LocalDateTimeUtil.getNearestAvailableTime;
 import static java.util.stream.Collectors.toMap;
 
 @Component
@@ -33,12 +35,6 @@ public class ForecastClient {
     private String ENDPOINT;
 
     private static final String DATA_TYPE = "JSON";
-    private LocalDateTime localDateTime;
-
-    public ForecastClient() {
-        this.localDateTime = LocalDateTime.now();
-    }
-
 
     public ForecastDto getForecast(String x, String y) {
         DefaultUriBuilderFactory builderFactory = new DefaultUriBuilderFactory();
@@ -72,26 +68,7 @@ public class ForecastClient {
                 .build();
     }
 
-    private String getLocalDate() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate localDate = localDateTime.toLocalDate();
 
-        if (LocalTime.now().isBefore(LocalTime.of(0,40))) {
-            localDate.minusDays(1L);
-        }
-        return localDate.format(dateTimeFormatter);
-    }
-
-    private String getNearestAvailableTime() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HHmm");
-        LocalTime nowTime = localDateTime.toLocalTime();
-        //초단기실황정보는 매시간 40분마다 최신 정보를 업데이트 한다.
-        if(nowTime.getMinute()<40){
-            nowTime = nowTime.minusHours(1L);
-        }
-        nowTime = nowTime.minusMinutes(nowTime.getMinute());
-        return nowTime.format(dateTimeFormatter);
-    }
 
     private ForecastDto convertForecast(ResponseEntity<String> forecastResponse) {
         Map<String, Float> forecastMap = new HashMap<>();
