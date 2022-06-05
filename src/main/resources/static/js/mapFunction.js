@@ -15,7 +15,7 @@ navigator.geolocation.getCurrentPosition(function (position) {
             longitude: position.coords.longitude
         },
         success: function (data) {
-            console.log(data);
+            $("#temp").text(data.t1h);
         },
         error: function (error) {
             console.log(error);

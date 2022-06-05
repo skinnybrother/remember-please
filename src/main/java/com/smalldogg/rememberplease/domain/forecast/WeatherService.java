@@ -4,7 +4,6 @@ import com.smalldogg.rememberplease.domain.forecast.dto.ForecastDto;
 import com.smalldogg.rememberplease.domain.forecast.dto.LocationDto;
 import com.smalldogg.rememberplease.domain.forecast.dto.ForecastResponseDto;
 import com.smalldogg.rememberplease.domain.forecast.entity.Forecast;
-import com.smalldogg.rememberplease.domain.forecast.entity.ForecastId;
 import com.smalldogg.rememberplease.domain.forecast.mapper.ForecastRequestMapper;
 import com.smalldogg.rememberplease.domain.forecast.mapper.ForecastResponseMapper;
 import com.smalldogg.rememberplease.domain.forecast.repository.ForecastRepository;
