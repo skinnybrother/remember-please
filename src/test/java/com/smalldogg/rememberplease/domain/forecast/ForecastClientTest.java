@@ -16,10 +16,4 @@ class ForecastClientTest {
     void forecastClientTest() throws URISyntaxException {
         forecastClient.getForecast("60","121");
     }
-
-//    @Test
-//    void getNearestAvailableTime(){
-//        System.out.println("nearestAvailableTime = " + forecastClient.getNearestAvailableTime());
-//    }
-
 }

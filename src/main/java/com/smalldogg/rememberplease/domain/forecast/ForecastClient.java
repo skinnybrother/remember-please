@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.smalldogg.rememberplease.domain.forecast.dto.ForecastDto;
+import com.smalldogg.rememberplease.domain.forecast.entity.Forecast;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -39,7 +40,7 @@ public class ForecastClient {
     }
 
 
-    public Forecast getForecast(String x, String y) {
+    public ForecastDto getForecast(String x, String y) {
         DefaultUriBuilderFactory builderFactory = new DefaultUriBuilderFactory();
         // URI의 내용을 인코딩하지 않도록 인코딩 모드 적용
         builderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
@@ -55,32 +56,7 @@ public class ForecastClient {
             System.out.println("Okay");
         }
         //결과 파싱
-        ForecastDto forecastDto = convertForecast(forecastResponse);
-
-
-
-        return new Forecast();
-    }
-
-    private ForecastDto convertForecast(ResponseEntity<String> forecastResponse) {
-        Map<String, Float> forecastMap = new HashMap<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        JsonElement element = JsonParser.parseString(forecastResponse.getBody());
-        JsonArray items = element.getAsJsonObject()
-                .get("response").getAsJsonObject()
-                .get("body").getAsJsonObject()
-                .get("items").getAsJsonObject()
-                .getAsJsonArray("item");
-
-        for (JsonElement item : items) {
-            String key = item.getAsJsonObject().get("category").getAsString().toLowerCase();
-            float value = Float.valueOf(item.getAsJsonObject().get("obsrValue").getAsString());
-            forecastMap.put(key, value);
-        }
-
-        return objectMapper.convertValue(forecastMap, ForecastDto.class);
+        return convertForecast(forecastResponse);
     }
 
     private UriComponents getUri(String x, String y) {
@@ -115,6 +91,27 @@ public class ForecastClient {
         }
         nowTime = nowTime.minusMinutes(nowTime.getMinute());
         return nowTime.format(dateTimeFormatter);
+    }
+
+    private ForecastDto convertForecast(ResponseEntity<String> forecastResponse) {
+        Map<String, Float> forecastMap = new HashMap<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonElement element = JsonParser.parseString(forecastResponse.getBody());
+        JsonArray items = element.getAsJsonObject()
+                .get("response").getAsJsonObject()
+                .get("body").getAsJsonObject()
+                .get("items").getAsJsonObject()
+                .getAsJsonArray("item");
+
+        for (JsonElement item : items) {
+            String key = item.getAsJsonObject().get("category").getAsString().toLowerCase();
+            float value = Float.valueOf(item.getAsJsonObject().get("obsrValue").getAsString());
+            forecastMap.put(key, value);
+        }
+
+        return objectMapper.convertValue(forecastMap, ForecastDto.class);
     }
 
 

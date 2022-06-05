@@ -1,4 +1,4 @@
-package com.smalldogg.rememberplease.domain.forecast;
+package com.smalldogg.rememberplease.domain.forecast.entity;
 
 import com.smalldogg.rememberplease.domain.BaseTimeEntity;
 import lombok.AccessLevel;

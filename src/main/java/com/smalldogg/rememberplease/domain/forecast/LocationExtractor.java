@@ -1,20 +1,20 @@
 package com.smalldogg.rememberplease.domain.forecast;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.smalldogg.rememberplease.domain.forecast.dto.ForecastDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -26,16 +26,17 @@ public class LocationExtractor {
     @Value("${ncp.maps.client.secret}")
     private String clientSecret;
 
-    public String getLocation(String longitude, String latitude) throws JsonProcessingException {
+    public ForecastDto getLocation(String longitude, String latitude) {
         RestTemplate restTemplate = new RestTemplate();
+
+        List<Object> objects = new LinkedList<>();
 
         UriComponents uri = getUri(longitude, latitude);
         HttpEntity entity = new HttpEntity(getNCPHeader());
 
         ResponseEntity<String> exchange = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, entity, String.class);
-        List<String> locationList = extractLocationList(exchange.getBody());
+        return extractLocationList(exchange.getBody());
 
-        return StringUtils.collectionToCommaDelimitedString(locationList).replace("\"","");
     }
 
     private HttpHeaders getNCPHeader() {
@@ -53,12 +54,17 @@ public class LocationExtractor {
                 .build();
     }
 
-    private List<String> extractLocationList(String jsonString) throws JsonProcessingException {
-        List<String> result = new ArrayList<>();
-        JsonNode jsonNode = new ObjectMapper().readTree(jsonString);
-        jsonNode.get("results").get(0).get("region").iterator().forEachRemaining(area -> {
-            result.add(String.valueOf(area.get("name")));
-        });
-        return result;
+    private ForecastDto extractLocationList(String jsonString) {
+        ForecastDto forecastDto = new ForecastDto();
+        JsonObject locationJson = JsonParser.parseString(jsonString).getAsJsonObject()
+                .get("results").getAsJsonArray().get(0).getAsJsonObject()
+                .get("region").getAsJsonObject();
+
+        for (int i = 1; i < 4; i++) {
+            if (i == 1) forecastDto.setState(locationJson.get("area" + i).getAsJsonObject().get("name").toString());
+            if (i == 2) forecastDto.setCity(locationJson.get("area" + i).getAsJsonObject().get("name").toString());
+            if (i == 3) forecastDto.setTown(locationJson.get("area" + i).getAsJsonObject().get("name").toString());
+        }
+        return forecastDto;
     }
 }
