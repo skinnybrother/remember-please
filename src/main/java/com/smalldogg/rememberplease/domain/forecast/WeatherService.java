@@ -32,29 +32,21 @@ public class WeatherService {
 
     public ForecastResponseDto getWeather(LocationDto locationDto) {
         ForecastDto location = locationExtractor.getLocation(locationDto.getLongitude(), locationDto.getLatitude());
-        ForecastId forecastId = new ForecastId(locationDto.getX(), locationDto.getY());
-        Optional<Forecast> forecastOptional = forecastRepository.findById(forecastId);
 
         LocalDateTime nearestAvailableLocalDateTime = getNearestAvailableLocalDateTime();
         Optional<Forecast> latestAvailableForecast = forecastRepository.findByXAndYAndReleaseDateAfter(locationDto.getX(), locationDto.getY(), nearestAvailableLocalDateTime);
 
-        Forecast forecast;
-        if (latestAvailableForecast.isEmpty()) {
-            ForecastDto forecastDto = forecastClient.getForecast(locationDto.getX(), locationDto.getY());
-
-            forecastDto.setX(locationDto.getX());
-            forecastDto.setY(locationDto.getY());
-            forecastDto.setState(location.getState());
-            forecastDto.setCity(location.getCity());
-            forecastDto.setTown(location.getTown());
-            forecastDto.setReleaseDate(nearestAvailableLocalDateTime);
-            forecast = ForecastRequestMapper.INSTANCE.toEntity(forecastDto);
-
-            forecastRepository.save(forecast);
-        } else {
-            forecast = forecastOptional.get();
-        }
-
+        Forecast forecast = latestAvailableForecast.orElseGet(() -> {
+                    ForecastDto forecastDto = forecastClient.getForecast(locationDto.getX(), locationDto.getY());
+                    forecastDto.setX(locationDto.getX());
+                    forecastDto.setY(locationDto.getY());
+                    forecastDto.setState(location.getState());
+                    forecastDto.setCity(location.getCity());
+                    forecastDto.setTown(location.getTown());
+                    forecastDto.setReleaseDate(nearestAvailableLocalDateTime);
+                    return forecastRepository.save(ForecastRequestMapper.INSTANCE.toEntity(forecastDto));
+                }
+        );
         return ForecastResponseMapper.INSTANCE.toDto(forecast);
     }
 
