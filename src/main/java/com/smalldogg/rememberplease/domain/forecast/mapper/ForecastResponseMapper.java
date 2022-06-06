@@ -1,9 +1,9 @@
 package com.smalldogg.rememberplease.domain.forecast.mapper;
 
 import com.smalldogg.rememberplease.domain.GenericMapper;
-import com.smalldogg.rememberplease.domain.forecast.dto.ForecastDto;
 import com.smalldogg.rememberplease.domain.forecast.dto.ForecastResponseDto;
 import com.smalldogg.rememberplease.domain.forecast.entity.Forecast;
+import com.smalldogg.rememberplease.domain.forecast.entity.ShortForecast;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

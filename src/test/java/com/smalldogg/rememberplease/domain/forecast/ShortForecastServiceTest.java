@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 @Rollback(value = false)
-class WeatherServiceTest {
+class ShortForecastServiceTest {
 
     @Autowired
-    WeatherService weatherService;
+    ForecastService forecastService;
 
     @Autowired
     ForecastRepository forecastRepository;
@@ -34,7 +34,7 @@ class WeatherServiceTest {
 
     @Test
     void getWeather(){
-        ForecastResponseDto weather = weatherService.getWeather(locationDto);
+        ForecastResponseDto weather = forecastService.getForecast(locationDto);
         System.out.println("weather = " + weather);
     }
 

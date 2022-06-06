@@ -7,13 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.net.URISyntaxException;
 
 @SpringBootTest
-class ForecastClientTest {
+class ShortForecastClientTest {
 
     @Autowired
     ForecastClient forecastClient;
 
     @Test
     void forecastClientTest() throws URISyntaxException {
-        forecastClient.getForecast("60","121");
+        forecastClient.getUltraShortForecast("60","121");
     }
 }

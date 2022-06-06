@@ -4,21 +4,18 @@ import com.smalldogg.rememberplease.domain.forecast.dto.LocationDto;
 import com.smalldogg.rememberplease.domain.forecast.dto.ForecastResponseDto;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-
 @RestController
 public class WeatherController {
-    private final WeatherService weatherService;
+    private final ForecastService forecastService;
 
 
-    public WeatherController(WeatherService weatherService) {
-        this.weatherService = weatherService;
+    public WeatherController(ForecastService forecastService) {
+        this.forecastService = forecastService;
     }
 
     @GetMapping("/weather")
-    public ForecastResponseDto getWeather(LocationDto locationDto, HttpServletRequest request) throws IOException {
+    public ForecastResponseDto getWeather(LocationDto locationDto) {
 
-        return weatherService.getWeather(locationDto);
+        return forecastService.getForecast(locationDto);
     }
 }
