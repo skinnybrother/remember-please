@@ -4,7 +4,9 @@ import com.smalldogg.rememberplease.domain.forecast.dto.*;
 import com.smalldogg.rememberplease.domain.forecast.entity.Forecast;
 import com.smalldogg.rememberplease.domain.forecast.entity.ForecastId;
 import com.smalldogg.rememberplease.domain.forecast.mapper.ForecastRequestMapper;
+import com.smalldogg.rememberplease.domain.forecast.mapper.ForecastResponseMapper;
 import com.smalldogg.rememberplease.domain.forecast.mapper.ShortForecastRequestMapper;
+import com.smalldogg.rememberplease.domain.forecast.mapper.VilageForecastRequestMapper;
 import com.smalldogg.rememberplease.domain.forecast.repository.ForecastRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class ForecastService {
 
     public ForecastResponseDto getForecast(LocationDto locationDto) {
         Optional<Forecast> forecastOptional = forecastRepository.findById(new ForecastId(locationDto.getX(), locationDto.getY()));
+
         Forecast forecast = forecastOptional.orElseGet(() -> {
             ForecastRequestDto forecastRequestDto = locationExtractor.getForecast(locationDto.getLongitude(), locationDto.getLatitude());
             forecastRequestDto.setX(locationDto.getX());
@@ -37,6 +40,7 @@ public class ForecastService {
             return forecastRepository.save(ForecastRequestMapper.INSTANCE.toEntity(forecastRequestDto));
         });
 
+        ForecastRequestDto forecastRequestDto = new ForecastRequestDto();
         if (forecast.getShortForecast() == null ||
                 forecast.getShortForecast().getReleaseDate().isBefore(getShortNearestAvailableLocalDateTime())) {
 
@@ -47,9 +51,13 @@ public class ForecastService {
 
         if (forecast.getVilageForecast() == null ||
                 forecast.getVilageForecast().getReleaseDate().isBefore(getVilageNearestAvailableLocalDateTime())) {
+
             VilageForecastDto vilageForecastDto = forecastClient.getVilageForecast(locationDto.getX(), locationDto.getY());
+            forecast.saveVilageForecast(VilageForecastRequestMapper.INSTANCE.toEntity(vilageForecastDto));
+            forecastRepository.save(forecast);
         }
-        return null;
+
+        return ForecastResponseMapper.INSTANCE.toDto(forecast);
     }
 
     //1시간 주기

@@ -69,8 +69,9 @@ public class ForecastClient {
 
         UriComponents uri = getUri(VILAGE_FORECAST, x, y);
         ResponseEntity<String> forecastResponse = restTemplate.getForEntity(uri.toUriString(), String.class);
+
         VilageForecastDto vilageForecastDto = convertVilageForcast(forecastResponse);
-        vilageForecastDto.setVilageReleaseDate(getVilageNearestAvailableLocalDateTime());
+        vilageForecastDto.setReleaseDate(getVilageNearestAvailableLocalDateTime());
         return vilageForecastDto;
     }
 
@@ -94,7 +95,7 @@ public class ForecastClient {
         if (url == ULTRA_SHORT_FORECAST) {
             uriComponentsBuilder.queryParam("base_time", getShortNearestAvailableTime());
         } else {
-            uriComponentsBuilder.queryParam("base_time", getVilageNearestAvailableLocalDateTime());
+            uriComponentsBuilder.queryParam("base_time", getVilageNearestAvailableTime());
         }
         return uriComponentsBuilder.build();
     }
@@ -121,7 +122,6 @@ public class ForecastClient {
     }
 
     private VilageForecastDto convertVilageForcast(ResponseEntity<String> forecastResponse) {
-        Map<String, Float> forecastMap = new HashMap<>();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -149,9 +149,10 @@ public class ForecastClient {
                     category
             );
         }
-        maps.forEach((s,f)->f=f/3);
+        maps.forEach((f,c)->{maps.put(f,c/3);});
 
         System.out.println("maps = " + maps);
-        return null;
+
+        return objectMapper.convertValue(maps, VilageForecastDto.class);
     }
 }

@@ -8,18 +8,28 @@ import java.util.stream.Stream;
 
 public class LocalDateTimeUtil {
 
-    private static final String[] availableTime = {"200", "500", "800", "1100", "1400", "1700", "2000", "2300"};
+    private static final String[] vilageAvailableTime = {"210", "510", "810", "1110", "1410", "1710", "2010", "2310"};
 
     public static LocalDateTime getShortNearestAvailableLocalDateTime() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
-        String nearestAvailableLocalDateTime = getLocalDate() + getShortNearestAvailableTime();
+        DateTimeFormatter dateTimeFormatter = getDateTimeFormatter();
+        String nearestAvailableLocalDateTime = getNearestLocalDateTime(getShortNearestAvailableTime());
         return LocalDateTime.parse(nearestAvailableLocalDateTime, dateTimeFormatter);
     }
 
     public static LocalDateTime getVilageNearestAvailableLocalDateTime() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
-        String nearestAvailableLocalDateTime = getLocalDate() + getVilageNearestAvailableTime();
+        DateTimeFormatter dateTimeFormatter = getDateTimeFormatter();
+        String nearestAvailableLocalDateTime = getNearestLocalDateTime(getVilageNearestAvailableTime());
         return LocalDateTime.parse(nearestAvailableLocalDateTime, dateTimeFormatter);
+    }
+
+    private static String getNearestLocalDateTime(String nearestAvailableTime) {
+        String nearestAvailableLocalDateTime = getLocalDate() + nearestAvailableTime;
+        return nearestAvailableLocalDateTime;
+    }
+
+    private static DateTimeFormatter getDateTimeFormatter() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        return dateTimeFormatter;
     }
 
     public static String getLocalDate() {
@@ -43,13 +53,13 @@ public class LocalDateTimeUtil {
         return nowTime.format(dateTimeFormatter);
     }
 
-    private static String getVilageNearestAvailableTime() {
+    public static String getVilageNearestAvailableTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HHmm");
         int nowTime = Integer.parseInt(LocalDateTime.now().toLocalTime().format(dateTimeFormatter));
-        int first = Stream.of(availableTime)
+        int first = Stream.of(vilageAvailableTime)
                 .mapToInt(Integer::parseInt)
                 .filter(i -> i < nowTime)
-                .max().orElse(2300);
-        return first < 1200 ? "0" + first : String.valueOf(first);
+                .max().orElse(2310);
+        return first < 1210 ? "0" + first/100*100 : String.valueOf(first/100*100);
     }
 }
