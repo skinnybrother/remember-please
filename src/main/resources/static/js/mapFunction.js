@@ -3,7 +3,22 @@ navigator.geolocation.getCurrentPosition(function (position) {
     //사용자 위치 정보 동의 및 위치 정보 수집
 
     let dfsXyConv = dfs_xy_conv(toXY,position.coords.latitude, position.coords.longitude);
-    //Ajax Call을 통해, 사용자 위치 기반 날씨 정보 수집 및 출력
+
+    function getPcp(pcp) {
+        console.log(pcp)
+        if(pcp==0.0){
+            console.log(pcp);
+            $("#pcp").text("없음");
+            return "☁";
+        }
+        //흐림
+        if (pcp > 1) {
+            $("#pcp").text(pcp);
+            return "🌧"
+        }
+    }
+
+//Ajax Call을 통해, 사용자 위치 기반 날씨 정보 수집 및 출력
     $.ajax({
         type: 'get',
         url: "/weather",
@@ -14,8 +29,21 @@ navigator.geolocation.getCurrentPosition(function (position) {
             longitude: position.coords.longitude
         },
         success: function (data) {
-            console.log(data)
             $("#temp").text(data.shortForecast.t1h);
+
+            let sky = data.vilageForecast.sky;
+            let pcp = data.vilageForecast.pcp;
+            if(sky<3){
+                $("#weather").text("🌞");
+                //맑음
+            }else if(3<=sky<4){
+                //구름 많음
+                $("#weather").text("⛅");
+            }else if(sky>4){
+                //강수 정도
+                let pcpText = getPcp(pcp);
+                $("#weather").text(pcpText);
+            }
         },
         error: function (error) {
             console.log(error);

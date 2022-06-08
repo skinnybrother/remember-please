@@ -60,6 +60,6 @@ public class LocalDateTimeUtil {
                 .mapToInt(Integer::parseInt)
                 .filter(i -> i < nowTime)
                 .max().orElse(2310);
-        return first < 1210 ? "0" + first/100*100 : String.valueOf(first/100*100);
+        return first < 1000 ? "0" + first/100*100 : String.valueOf(first/100*100);
     }
 }

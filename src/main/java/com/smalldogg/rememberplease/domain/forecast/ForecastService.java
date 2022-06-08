@@ -40,7 +40,6 @@ public class ForecastService {
             return forecastRepository.save(ForecastRequestMapper.INSTANCE.toEntity(forecastRequestDto));
         });
 
-        ForecastRequestDto forecastRequestDto = new ForecastRequestDto();
         if (forecast.getShortForecast() == null ||
                 forecast.getShortForecast().getReleaseDate().isBefore(getShortNearestAvailableLocalDateTime())) {
 
@@ -59,9 +58,4 @@ public class ForecastService {
 
         return ForecastResponseMapper.INSTANCE.toDto(forecast);
     }
-
-    //1시간 주기
-
-
-//        return ForecastResponseMapper.INSTANCE.toDto(forecast);
 }
