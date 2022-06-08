@@ -55,9 +55,9 @@ public class LocationExtractor {
                 .get("region").getAsJsonObject();
 
         for (int i = 1; i < 4; i++) {
-            if (i == 1) forecastRequestDto.setState(locationJson.get("area" + i).getAsJsonObject().get("name").toString());
-            if (i == 2) forecastRequestDto.setCity(locationJson.get("area" + i).getAsJsonObject().get("name").toString());
-            if (i == 3) forecastRequestDto.setTown(locationJson.get("area" + i).getAsJsonObject().get("name").toString());
+            if (i == 1) forecastRequestDto.setState(String.valueOf(locationJson.get("area" + i).getAsJsonObject().get("name")).replace("\"",""));
+            if (i == 2) forecastRequestDto.setCity(String.valueOf(locationJson.get("area" + i).getAsJsonObject().get("name")).replace("\"",""));
+            if (i == 3) forecastRequestDto.setTown(String.valueOf(locationJson.get("area" + i).getAsJsonObject().get("name")).replace("\"",""));
         }
         return forecastRequestDto;
     }
