@@ -56,10 +56,11 @@ public class LocalDateTimeUtil {
     public static String getVilageNearestAvailableTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HHmm");
         int nowTime = Integer.parseInt(LocalDateTime.now().toLocalTime().format(dateTimeFormatter));
-        int first = Stream.of(vilageAvailableTime)
+
+        int maxTime = Stream.of(vilageAvailableTime)
                 .mapToInt(Integer::parseInt)
                 .filter(i -> i < nowTime)
                 .max().orElse(2310);
-        return first < 1000 ? "0" + first/100*100 : String.valueOf(first/100*100);
+        return maxTime < 1000 ? "0" + maxTime/100*100 : String.valueOf(maxTime/100*100);
     }
 }
